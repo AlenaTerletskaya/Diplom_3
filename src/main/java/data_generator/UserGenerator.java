@@ -22,14 +22,9 @@ public class UserGenerator {
     // Метод возвращает пользователя с уникальными данными.
     // Параметры: минимальная длина пароля (включительно), максимальная длина пароля (не включительно).
     public static User getUniqueUser(int minLengthPswd, int maxLengthPswdNotInclsv) {
-
         String name = fakerRu.name().name();
         String password = fakerEn.internet()
                 .password(minLengthPswd,maxLengthPswdNotInclsv, true, false, true);
-
         return new User(name, getUniqueEmail(), password);
     }
-
-
-
 }

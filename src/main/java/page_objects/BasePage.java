@@ -12,8 +12,7 @@ public class BasePage {
 
     protected final WebDriver driver; // Поле driver
     // URL главной страницы сайта
-    private final static String MAIN_PAGE_URL = "https://stellarburgers.nomoreparties.site/";
-
+    private static final String MAIN_PAGE_URL = "https://stellarburgers.nomoreparties.site/";
     // Локатор слоев div, которые могут перекрывать другие элементы
     private static final By DIV_MODAL_OVERLAY = By.cssSelector("div.Modal_modal_overlay__x2ZCr");
 
@@ -90,5 +89,4 @@ public class BasePage {
         new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.invisibilityOfAllElements(driver.findElements(elementLocator)));
     }
-
 }

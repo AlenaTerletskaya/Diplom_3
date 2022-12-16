@@ -1,6 +1,8 @@
 package tests;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -16,18 +18,26 @@ public class BaseTest {
     // Инициализируем драйвер в зависимости от того, где будем тестировать: в Google Chrome или Яндекс браузере.
     @Before
     public void setUp() {
-
-
+        // Код для Chrome браузера:
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+/**
         // Код для Яндекс браузера:
-        // Указываем путь к Chrome драйверу той версии, которая соответствует Яндекс браузеру.
-        System.setProperty("webdriver.chrome.driver", "C:\\Program Files\\Webdriver\\chromedriver106.exe");
+        // Нужно создать системную переменную "YANDEX_DRIVER_PATH", в которой указать путь к Chrome драйверу.
+        // Например: YANDEX_DRIVER_PATH=C:\Program Files\Webdriver\chromedriver106.exe
+        // Версия драйвера должна соответствовать Яндекс браузеру.
+        System.setProperty("webdriver.chrome.driver", System.getenv("YANDEX_DRIVER_PATH"));
         ChromeOptions options = new ChromeOptions();
-        // Указываем путь к Яндекс браузеру
-        options.setBinary("C:\\Users\\User\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe");
+        // Нужно создать системную переменную "YANDEX_BROWSER_PATH", в которой указать путь к Яндекс браузеру.
+        // Например: YANDEX_BROWSER_PATH=C:\Users\User\AppData\Local\Yandex\YandexBrowser\Application\browser.exe
+        options.setBinary(System.getenv("YANDEX_BROWSER_PATH"));
         driver = new ChromeDriver(options);
 
-        // Код для Chrome браузера:
-        // driver = new ChromeDriver();
+        Assert.assertNotNull("Create a system variable \"YANDEX_DRIVER_PATH\", " +
+                "in which specify the path to the Chrome driver", System.getenv("YANDEX_DRIVER_PATH"));
+        Assert.assertNotNull("Create a system variable \"YANDEX_BROWSER_PATH\", " +
+                "in which specify the path to Yandex browser", System.getenv("YANDEX_BROWSER_PATH"));
+*/
     }
 
     @After
@@ -40,5 +50,4 @@ public class BaseTest {
     public void implicitlyWait(int numberOfSeconds) {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(numberOfSeconds));
     }
-
 }

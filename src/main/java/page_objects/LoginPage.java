@@ -19,12 +19,10 @@ public class LoginPage extends BasePage {
     // Локатор поля ввода пароля
     private static final By PASSWORD_FIELD = By.xpath(".//input[@name='Пароль']");
 
-
     // Конструктор класса
     public LoginPage(WebDriver driver) {
         super(driver);
     }
-
 
     // Геттер возвращает значение URL страницы логина
     public static String getLoginPageUrl() {
@@ -57,9 +55,6 @@ public class LoginPage extends BasePage {
         enterData(getEmailFieldLocator(), registeredUser.getEmail()); // Вводим емейл
         enterData(getPasswordFieldLocator(), registeredUser.getPassword()); // Вводим пароль
         clickField(getEnterButton()); // Кликаем по кнопке входа
-
-        // Явное ожидание загрузки главной страницы
-        waitPageLoad(getMainPageUrl());
+        waitPageLoad(getMainPageUrl()); // Явное ожидание загрузки главной страницы
     }
-
 }

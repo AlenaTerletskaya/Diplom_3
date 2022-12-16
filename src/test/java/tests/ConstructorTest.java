@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.By;
 import page_objects.MainPage;
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 import static page_objects.BasePage.getMainPageUrl;
 import static page_objects.MainPage.*;
@@ -18,8 +19,8 @@ import static page_objects.MainPage.*;
 @RunWith(Parameterized.class)
 public class ConstructorTest extends BaseTest {
 
-    private String xpathButton; // xpath локатора кнопки для клика
-    private String xpathPreviousButton; // xpath локатора предыдущей кнопки, на которой была подсветка
+    private String xpathButton; // xpath кнопки для клика
+    private String xpathPreviousButton; // xpath предыдущей кнопки, на которой была подсветка
     private MainPage mainPage;
 
     // Конструктор
@@ -28,7 +29,8 @@ public class ConstructorTest extends BaseTest {
         this.xpathPreviousButton = xpathPreviousButton;
     }
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters (name = "Тест. данные - " +
+            "xpath кнопки для клика: {0}, xpath предыдущей нажатой кнопки: {1}")
     public static Object[][] getData() {
         return new Object[][] {
                 // Проверяем переход к разделу "Булки"
@@ -43,7 +45,6 @@ public class ConstructorTest extends BaseTest {
     @Before
     public void start() {
         super.implicitlyWait(10); // Неявное ожидание
-
         mainPage = new MainPage(driver); // Создаем экземпляр гланой страницы
         mainPage.open(getMainPageUrl()); // Открываем главную страницу
     }
@@ -55,7 +56,6 @@ public class ConstructorTest extends BaseTest {
     @Description("Проверяет, что в разделе \"Конструктор\" работают переходы к разделам: " +
             "\"Булки\", \"Соусы\", \"Начинки\".")
     public void checkInConstructorUserCanGoToSections() {
-
         // Если первый xpath из параметров соответствует кнопке "Булки",
         if (xpathButton.equals(getBunsButtonXpath())) {
             // Явное ожидание кликабельности кнопки "Соусы"
@@ -65,24 +65,21 @@ public class ConstructorTest extends BaseTest {
             // Явное ожидание, пока подсветка кнопки "Булки" перестанет отображаться
             mainPage.waitElementToBeInvisible(mainPage.getIlluminationLocator(xpathButton));
         }
-
         // Явное ожидание кликабельности кнопки из параметров
         mainPage.waitElementToBeClicable(By.xpath(xpathButton));
         mainPage.clickField(By.xpath(xpathButton)); // Кликаем по кнопке с xpath из параметров
-
         // Явное ожидание отображения подсветки под нажатой кнопкой
         mainPage.waitElementToBeVisible(mainPage.getIlluminationLocator(xpathButton));
         // Явное ожидание, пока подсветка предыдущей кнопки перестанет отображаться
         mainPage.waitElementToBeInvisible(mainPage.getIlluminationLocator(xpathPreviousButton));
-
+        String notExpectedAttr = "tab_tab_type_current__2BEPc"; // Значение атрибута, которое появляется при подсветке
+        // Получаем значение аттрибута "class"
+        String attribute = mainPage.getParentElement(By.xpath(xpathPreviousButton)).getAttribute("class");
         // Проверяем, что под нажатой кнопкой появилась подсветка
         Assert.assertEquals("A backlight should appear under the clicked button.",
                 driver.findElement(mainPage.getIlluminationLocator(xpathButton)),
                 mainPage.getParentElement(By.xpath(xpathButton)));
-
         // Проверяем, что под предыдущей нажатой кнопкой нет подсветки
-        String notExpectedAttr = "tab_tab_type_current__2BEPc";
-        String attribute = mainPage.getParentElement(By.xpath(xpathPreviousButton)).getAttribute("class");
         Assert.assertFalse("There should be no backlight under the previous menu button.",
                 attribute.contains(notExpectedAttr));
     }

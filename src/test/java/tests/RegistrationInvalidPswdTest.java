@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import page_objects.RegistrationPage;
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 import static page_objects.RegistrationPage.getRegistrationPageUrl;
 
@@ -30,7 +31,6 @@ public class RegistrationInvalidPswdTest extends BaseTest {
     @Description("Проверяет, что нельзя зарегистрировать пользователя с паролем менее 6 символов. " +
             "При попытке регистрации поле пароля подсвечивается, выводится ошибка. ")
     public void checkRegisterUserPswdLessSixCharacters_expectError() {
-
         // Генерируем уникального пользователя с некорректным паролем (5 символов)
         User user = UserGenerator.getUniqueUser(5,6);
         // Регистрируем пользователя:
@@ -38,16 +38,13 @@ public class RegistrationInvalidPswdTest extends BaseTest {
         registrationPage.enterData(registrationPage.getEmailFieldLocator(), user.getEmail()); // Вводим емейл
         registrationPage.enterData(registrationPage.getPasswordFieldLocator(), user.getPassword()); // Вводим пароль
         registrationPage.clickField(registrationPage.getRegisterButtonLocator()); // Кликаем по кнопке регистрации
-
         // Проверяем, что отображается ошибка "Некорректный пароль"
         Assert.assertTrue(
                 "When entering an invalid password, an error should be displayed: \"Некорректный пароль\"",
                 registrationPage.isElementVisible(registrationPage.getPasswordError()));
-
         // Проверяем, что поле ввода пароля подсвечено красным
         Assert.assertTrue(
                "When entering an invalid password, the password field should be highlighted in red",
                 registrationPage.isElementVisible(registrationPage.getPasswordStatusError()));
     }
-
 }

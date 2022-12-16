@@ -14,7 +14,6 @@ public class HeaderPage extends BasePage {
     // Локатор кнопки "Конструктор"
     private static final By CONSTRUCTOR_BUTTON = By.xpath(".//p[text()='Конструктор']");
 
-
     // Конструктор класса
     public HeaderPage(WebDriver driver) {
         super(driver);

@@ -11,7 +11,6 @@ public class RegistrationPage extends BasePage{
 
     // URL страницы регистрации
     private final static String REGISTRATION_PAGE_URL = getMainPageUrl() + "register";
-
     // Локатор поля ввода имени
     private static final By NAME_FIELD = By.xpath(".//label[text()='Имя']/parent::*/input");
     // Локатор поля ввода емейла
@@ -24,16 +23,13 @@ public class RegistrationPage extends BasePage{
     private static final By PASSWORD_ERROR = By.xpath(".//p[text()='Некорректный пароль']");
     // Локатор поля ввода пароля со статусом ошибки (подсвеченного красным)
     private static final By PASSWORD_STATUS_ERROR = By.cssSelector("div.input_status_error");
-    // div.input_status_error:has(input[name='Пароль'])
     // Локатор ссылки "Войти"
     private static final By ENTER_LINK = By.cssSelector("[href='/login']");
-
 
     // Конструктор класса
     public RegistrationPage(WebDriver driver) {
         super(driver);
     }
-
 
     // Геттер возвращает значение URL страницы регистрации
     public static String getRegistrationPageUrl() {
@@ -78,16 +74,13 @@ public class RegistrationPage extends BasePage{
     // Метод регистрирует нового пользователя и возвращает его
     @Step("Registering a new user")
     public User registerNewUser() {
-
         User user = UserGenerator.getUniqueUser(6,16); // Генерируем уникального пользователя
         open(REGISTRATION_PAGE_URL); // Открываем страницу регистрации
-
         // Регистрируем пользователя:
         enterData(getNameFieldLocator(), user.getName()); // Вводим имя
         enterData(getEmailFieldLocator(), user.getEmail()); // Вводим емейл
         enterData(getPasswordFieldLocator(), user.getPassword()); // Вводим пароль
         clickField(getRegisterButtonLocator()); // Кликаем по кнопке регистрации
-
         return user;
     }
 }

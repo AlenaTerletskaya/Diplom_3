@@ -13,6 +13,7 @@ import org.openqa.selenium.By;
 import page_objects.LoginPage;
 import page_objects.MainPage;
 import page_objects.RegistrationPage;
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 import static page_objects.BasePage.getMainPageUrl;
 import static page_objects.HeaderPage.getPersonalAccountButton;
@@ -41,8 +42,7 @@ public class LogInTest extends BaseTest {
         this.locator = locator;
     }
 
-
-    @Parameterized.Parameters
+    @Parameterized.Parameters (name = "Тест. данные - URL страницы: {0}, локатор кнопки: {1}")
     public static Object[][] getData() {
         return new Object[][] {
                 // 0) Вход по кнопке «Войти в аккаунт» на главной странице
@@ -61,7 +61,6 @@ public class LogInTest extends BaseTest {
     @Before
     public void start() {
         super.implicitlyWait(10); // Неявное ожидание
-
         registrationPage = new RegistrationPage(driver); // Создаем экземпляр страницы регистрации
         user = registrationPage.registerNewUser(); // Регистрируем нового пользователя
     }
@@ -74,27 +73,21 @@ public class LogInTest extends BaseTest {
             "по кнопке «Личный кабинет» на странице главной / ленты заказов; " +
             "через ссылку \"Войти\" на странице регистрации / восстановления пароля.")
     public void checkRegisteredUserCanLogIn() {
-
         // Создаем экземпляры страниц:
         mainPage = new MainPage(driver); //  главной
         loginPage = new LoginPage(driver); // логина
-
         // Переходим на страницу логина по кнопке/ссылке на странице, указанным в параметрах
         mainPage.open(url); // Открываем страницу с URL из параметров
         mainPage.clickField(locator); // Кликаем по кнопке c локатором из параметров
-
         loginPage.waitPageLoad(getLoginPageUrl()); // Явное ожидание загрузки страницы логина
         // Проверяем, что перешли на страницу логина
         Assert.assertEquals("The application should go to the login page.",
                 loginPage.getLoginPageUrl(), driver.getCurrentUrl());
-
         // Логинимся под зарегистрированным пользователем
         loginPage.registeredUserLogIn(user);
-
         // Проверяем, что перешли на главную страницу
         Assert.assertEquals("After successful authorization, the application should go to the main page.",
                 getMainPageUrl(), driver.getCurrentUrl());
-
         // Проверяем, что после входа в аккаунт на главной странице отображается кнопка "Оформить заказ".
         Assert.assertTrue("After successful authorization the button \"Оформить заказ\" should be visible.",
                 mainPage.isElementVisible(mainPage.getOrderButtonLocator()));

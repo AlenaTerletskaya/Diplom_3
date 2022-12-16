@@ -14,6 +14,7 @@ import page_objects.HeaderPage;
 import page_objects.LoginPage;
 import page_objects.PersonalAccountPage;
 import page_objects.RegistrationPage;
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 import static page_objects.BasePage.getMainPageUrl;
 import static page_objects.HeaderPage.getPersonalAccountButton;
@@ -37,7 +38,7 @@ public class GoToPersonalAccountTest extends BaseTest {
         this.url = url;
     }
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters (name = "Тестовые данные - URL страницы: {0}")
     public static Object[][] getData() {
         return new Object[][] {
                 {getMainPageUrl()}, // URL главной страницы
@@ -48,10 +49,8 @@ public class GoToPersonalAccountTest extends BaseTest {
     @Before
     public void start() {
         super.implicitlyWait(10); // Неявное ожидание
-
         registrationPage = new RegistrationPage(driver); // Создаем экземпляр страницы регистрации
         user = registrationPage.registerNewUser(); // Регистрируем нового пользователя
-
         loginPage = new LoginPage(driver); // Создаем экземпляр страницы логина
         loginPage.waitPageLoad(getLoginPageUrl()); // Явное ожидание загрузки страницы логина
         loginPage.registeredUserLogIn(user); // Авторизуемся под зарегистрированным пользователем
@@ -68,27 +67,21 @@ public class GoToPersonalAccountTest extends BaseTest {
     @Description("Проверяет, что авторизованный пользователь может войти в личный кабинет: " +
             "по кнопке «Личный кабинет» на странице главной / ленты заказов.")
     public void checkAuthorizedUserCanGoToPersonalAccount() {
-
         headerPage = new HeaderPage(driver); // Создаем экземпляр заголовка страницы
-
         // Переходим на страницу, указанную в параметрах
         headerPage.open(url);
-
         headerPage.clickField(getPersonalAccountButton()); // Кликаем по кнопке входа в личный кабинет
         headerPage.waitPageLoad(getPersonalAccountPageUrl()); // Явное ожидание загрузки страницы личного кабинета
-
         accountPage = new PersonalAccountPage(driver); // Создаем экземпляр страницы личного кабинета
         // Получаем значение из поля "Имя"
         String name = accountPage.checkAttributeValue(accountPage.getNameFieldLocator());
+        // Получаем значение из поля "Логин"
+        String login = accountPage.checkAttributeValue(accountPage.getLoginFieldLocator());
         // Проверяем, что имя совпадает с именем пользователя
         Assert.assertEquals("The value in the \"Имя\" field must match the user name.",
                 user.getName(), name);
-
-        // Получаем значение из поля "Логин"
-        String login = accountPage.checkAttributeValue(accountPage.getLoginFieldLocator());
         // Проверяем, что логин совпадает с емейлом пользователя
         Assert.assertEquals("The value in the \"Логин\" field must match the user email.",
                 user.getEmail(), login);
     }
-
 }

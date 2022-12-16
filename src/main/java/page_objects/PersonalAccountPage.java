@@ -8,7 +8,6 @@ public class PersonalAccountPage extends BasePage {
 
     // URL страницы личного аккаунта
     private final static String PERSONAL_ACCOUNT_PAGE_URL = getMainPageUrl() + "account/profile";
-
     // Локатор поля c именем пользователя
     private static final By NAME_FIELD = By.xpath(".//label[text()='Имя']/parent::*/input");
     // Локатор поля с логином пользователя
@@ -44,10 +43,7 @@ public class PersonalAccountPage extends BasePage {
     // Метод возвращает значение атрибута "value" у элемента с данным локатором
     public String checkAttributeValue(By locator) {
         String attributeValue = driver.findElement(locator).getAttribute("value");
-
         System.out.println(driver.findElement(locator).getAttribute("value"));
-
         return attributeValue;
     }
-
 }

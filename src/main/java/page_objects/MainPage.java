@@ -11,7 +11,6 @@ public class MainPage extends BasePage {
     private static final By ORDER_BUTTON = By.xpath(".//button[text()='Оформить заказ']");
     // Локатор кнопки "Войти в аккаунт"
     private static final By ENTER_ACCOUNT_BUTTON = By.xpath(".//button[text()='Войти в аккаунт']");
-
     // xpath для локатора кнопки "Булки"
     private static final String BUNS_BUTTON_XPATH = ".//span[text()='Булки']";
     // xpath для локатора кнопки "Соусы"
@@ -41,10 +40,12 @@ public class MainPage extends BasePage {
     public static String getBunsButtonXpath() {
         return BUNS_BUTTON_XPATH;
     }
+
     // Геттер возвращает xpath для локатора кнопки "Соусы"
     public static String getSaucesButtonXpath() {
         return SAUCES_BUTTON_XPATH;
     }
+
     // Геттер возвращает xpath для локатора кнопки "Начинки"
     public static String getFillingsButtonXpath() {
         return FILLINGS_BUTTON_XPATH;
@@ -61,5 +62,4 @@ public class MainPage extends BasePage {
     public By getIlluminationLocator(String xpathButtonString) {
         return By.xpath(xpathButtonString + ILLUMINATION_XPATH);
     }
-
 }
